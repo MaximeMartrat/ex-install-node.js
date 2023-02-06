@@ -1,15 +1,9 @@
-//création des constantes pour exporter les modules express et fs  
+//création des constantes pour importer les modules express et fs  
 const express = require('express');
 const fs = require('fs');
 const app = express();
 
-//Demande au serveur d'ecouter sur le port 4000
-app.listen(4000, () => {
-    //Affichage d'un message pour confirmer que l'app tourne bien sur le port 4000
-    console.log('L\'app tourne sur le port 4000');
-    });
-
-//définition de la target pour les données
+//définition de la route pour les données
 app.get("/data", (request, response) => {
     //lecture du fichier menu.json en utilisant fs.readFile()
     fs.readFile("menu.json", (err, data) => {
@@ -20,8 +14,14 @@ app.get("/data", (request, response) => {
                 error: err
             });
         } else {
-            //sinon on envoi la reponse en JSON
+            //sinon on envoi la reponse parsée en JSON
             response.status(200).json(JSON.parse(data));
         }
     });
+});
+
+//Demande au serveur d'ecouter sur le port 4000
+app.listen(4000, () => {
+    //Affichage d'un message pour confirmer que l'app tourne bien sur le port 4000
+    console.log('L\'app tourne sur le port 4000');
 });
