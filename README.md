@@ -4,7 +4,9 @@
 
 *Installation des packages npm utiles au projet =>
     -express (pour écrire des fonctions de traitement pour différentes requêtes HTTP par le biais des routes) => npm install express
+
     -nodemon (pour redémarrer le processus automatiquement)=> npm install nodemon --start-dev (l'option --start-dev sert à ne pas installer le package complet mais seulement les options nécessaires au développement du projet)
+    
     -fs (pour créer et lire les fichiers)=> npm install fs
     
 *Creation du fichier app.js pour lancer le serveur
