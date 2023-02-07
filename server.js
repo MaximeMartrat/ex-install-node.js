@@ -1,4 +1,4 @@
-//on importe la constante app qui proviet du fichier app.js
+//on importe la constante app qui provient du fichier app.js
 const app = require('./app');
 const port = 3100
 
