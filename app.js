@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
 const readFile = require('./src/utils/manipulate');
+//const writeFile = require('./src/utils/writefile');
 //une route qui va permettre d'afficher les données contenu dans le fichier menu.json en JSON dans la requête
 //GET "/menu"
 //ex: hhtp://localhost:3100/data
@@ -28,30 +29,31 @@ app.get("/:filename/:arrayName/:id", (request, response) => {
 // C'est une route qui me permet d'insérer de la données dans mon fichier data.json
 // POST "/data"
 // Ex: http://localhost:3000/data
-app.post("/:arrayName", (request, response) => {
+app.post("/:filename/:arrayName", (request, response) => {
+    // writeFile("./src/model/" + request.params.filename + ".json", response, null, request.params.arrayName);
     // lire le contenu du fichier
-    fs.readFile("menu.json", (err, data) => {
+    fs.readFile("./src/model/" + request.params.filename + ".json", (err, data) => {
         // si une erreur sur la lecture du fichier
         if (err) {
-            response.status(500).json({
-            message: "Une erreur est survenue lors de la lecture des données",
-            });
+             response.status(500).json({
+             message: "Une erreur est survenue lors de la lecture des données",
+             });
         } else {
             // stocker les données existante
             const existingData = JSON.parse(data);
             // rajouter ma donnée à moi
             existingData[request.params.arrayName].push(request.body);
             // je vais reécrire le fichier avec les nouvelles données
-            fs.writeFile("menu.json", JSON.stringify(existingData), (writeErr) => {
-                // si il ya une erreur au moment de l'écriture
+            fs.writeFile("./src/model/" + request.params.filename + ".json", JSON.stringify(existingData), (writeErr) => {
+                 // si il ya une erreur au moment de l'écriture
                 if (writeErr){
-                    response.status(500).json({
-                    message: "Une erreur est survenue lors de l'écriture des données",
-                    });
+                     response.status(500).json({
+                     message: "Une erreur est survenue lors de l'écriture des données",
+                     });
                 } else {
-                    response.status(200).json({
-                    message: "Les données ont été ajouté avec succès",
-                    });
+                     response.status(200).json({
+                     message: "Les données ont été ajouté avec succès",
+                     });
                 }
             });
         }
