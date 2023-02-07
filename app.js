@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 //une route qui va permettre d'afficher les données contenu dans le fichier data.json en JSON dans la requête
 //GET "/data"
 //ex: hhtp://localhost:3100/data
-app.get("/menu", (request, response) => {
+app.get("/:arrayName", (request, response) => {
     //on utilise la methode du module "fs" pour lire et retourner le contenu du fichier en chaine de caractères
     fs.readFile("menu.json", (err, data) => {
         //si dans le callback l'erreur n'est pas null
@@ -23,7 +23,8 @@ app.get("/menu", (request, response) => {
             });
         } else {
             //sinon on envoi la reponse au status 200 et je renvoie en json la chaine de caractères transformés en JSON
-            response.status(200).json(JSON.parse(data));
+            const jsonData = JSON.parse(data);
+            response.status(200).json(jsonData.menu[request.params.arrayName]);
         }
     });
 });
@@ -31,7 +32,7 @@ app.get("/menu", (request, response) => {
 //C'est une route qui me permet de récupérer une data par son id
 //GET "/data/:id"
 // Ex: http://localhost:3100/data/1
-app.get("/menu/entrees/:id", (request, response) => {
+app.get("/:arrayName/:id", (request, response) => {
     // Je vais utiliser la méthode readFile du module fs pour pouvoir récupérer l'entièreté du fichier
     fs.readFile("menu.json", (err, data) => {
         // Je met une condition si il y a une erreur dans le callback
@@ -45,7 +46,7 @@ app.get("/menu/entrees/:id", (request, response) => {
             // Je parse la chaine de caractères en Json pour le transformez en JSON manipulable
             const jsonData = JSON.parse(data);
             // Je vais cherchez dans ce fichier si l'id correspondants en paramètres existe dans le contenue
-            const dataById = jsonData.menu.entrees.find(
+            const dataById = jsonData.menu[request.params.arrayName].find(
             (obj) => obj.id === parseInt(request.params.id)
             );
             // Si on trouve un objet avec cet id
@@ -65,19 +66,19 @@ app.get("/menu/entrees/:id", (request, response) => {
 // C'est une route qui me permet d'insérer de la données dans mon fichier data.json
 // POST "/data"
 // Ex: http://localhost:3000/data
-app.post("/menu/desserts", (request, response) => {
+app.post("/:newArray", (request, response) => {
     // lire le contenu du fichier
     fs.readFile("menu.json", (err, data) => {
         // si une erreur sur la lecture du fichier
         if (err) {
             response.status(500).json({
             message: "Une erreur est survenue lors de la lecture des données",
-        });
+            });
         } else {
             // stocker les données existante
             const existingData = JSON.parse(data);
             // rajouter ma donnée à moi
-            existingData.menu.desserts.push(request.body);
+            existingData.menu[request.params.newArray].push(request.body);
             // je vais reécrire le fichier avec les nouvelles données
             fs.writeFile("menu.json", JSON.stringify(existingData), (writeErr) => {
                 // si il ya une erreur au moment de l'écriture

@@ -17,3 +17,5 @@
 *Lancement de la requête avec l'extension de VsCode Thunder Client => New Request
 
 *Appel à la base de données crée en tapant l'adresse du serveur => http://localhost:4000/data
+
+*Installation du package body-parser => npm install body-parser
